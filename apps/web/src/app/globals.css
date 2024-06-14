@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 html {
-
 }
 
 @media (prefers-color-scheme: dark) {
@@ -11,15 +10,20 @@ html {
 }
 
 body {
-    @apply text-zinc-400;
-    font-family: var(--font-body);
+  @apply text-zinc-400;
+  font-family: var(--font-body);
 }
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-hand);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-hand);
 }
 p {
-    @apply tracking-wider;
+  @apply tracking-wider;
 }
 a {
-    @apply underline;
+  @apply underline;
 }
