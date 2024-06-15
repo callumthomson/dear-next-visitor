@@ -4,7 +4,7 @@ import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 export const getMessageCount = async (): Promise<number> => {
   const response = await ddb.send(
     new QueryCommand({
-      TableName: process.env.AWS_DYNAMODB_TABLE_NAME,
+      TableName: process.env.DYNAMODB_TABLE_NAME,
       KeyConditionExpression: 'PK = :pk',
       ExpressionAttributeValues: {
         ':pk': itemKeys.messageCount.PK,

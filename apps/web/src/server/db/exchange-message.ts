@@ -4,7 +4,7 @@ import { QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 const getLatestMessage = async (): Promise<string> => {
   const response = await ddb.send(
     new QueryCommand({
-      TableName: process.env.AWS_DYNAMODB_TABLE_NAME,
+      TableName: process.env.DYNAMODB_TABLE_NAME,
       KeyConditionExpression: 'PK = :pk',
       ExpressionAttributeValues: {
         ':pk': itemKeys.latestMessage.PK,
@@ -26,7 +26,7 @@ export const exchangeMessage = async (message: string): Promise<string> => {
       TransactItems: [
         {
           Update: {
-            TableName: process.env.AWS_DYNAMODB_TABLE_NAME,
+            TableName: process.env.DYNAMODB_TABLE_NAME,
             Key: { PK: itemKeys.messageCount.PK, SK: itemKeys.messageCount.SK },
             UpdateExpression: 'ADD MessageCount :incBy',
             ExpressionAttributeValues: { ':incBy': 1 },
@@ -34,7 +34,7 @@ export const exchangeMessage = async (message: string): Promise<string> => {
         },
         {
           Update: {
-            TableName: process.env.AWS_DYNAMODB_TABLE_NAME,
+            TableName: process.env.DYNAMODB_TABLE_NAME,
             Key: { PK: itemKeys.latestMessage.PK, SK: itemKeys.latestMessage.SK },
             UpdateExpression: 'SET MessageText = :newMessage',
             ConditionExpression: 'MessageText = :oldMessage',
