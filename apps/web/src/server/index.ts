@@ -3,12 +3,14 @@ import { handle } from 'hono/vercel';
 import { z } from 'zod';
 import { zValidator } from '@hono/zod-validator';
 import { errorHandler, notFoundHandler } from '@/server/handlers';
+import { getMessageCount } from '@/server/db/get-message-count';
+import { exchangeMessage } from '@/server/db/exchange-message';
 
 const app = new Hono().basePath('/api');
 
 const appRoutes = app
-  .get('/messageCount', (c) => {
-    return c.json({ count: 4043 });
+  .get('/messageCount', async (c) => {
+    return c.json({ count: await getMessageCount() });
   })
   .post(
     '/exchangeMessage',
@@ -20,16 +22,16 @@ const appRoutes = app
           .min(20, { message: 'The message must be at least 20 characters' }),
       }),
     ),
-    (c) => {
+    async (c) => {
       const { message } = c.req.valid('json');
+      const savedMessage = await exchangeMessage(message);
       return c.json({
-        message: `${message}+kek`,
+        message: savedMessage,
       });
     },
   );
 export type AppRoutes = typeof appRoutes;
 
-// app.route('/subscribe-email', subscribeEmail);
 app.onError(errorHandler);
 app.notFound(notFoundHandler);
 

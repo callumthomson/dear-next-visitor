@@ -6,7 +6,7 @@ import { ExchangeSection } from '@/components/exchange-section';
 
 export default function Root() {
   const messageCountData = useQuery({
-    queryKey: ['messageCountData'],
+    queryKey: ['messageCount'],
     queryFn: () => api.messageCount.$get().then((result) => result.json()),
   });
   return (
@@ -28,10 +28,11 @@ export default function Root() {
         <div className={'flex'}>
           <div className={'bg-zinc-800 p-5 my-3 rounded'}>
             <p>
-              Welcome, traveller, to the land of transient messages. It is here
-              you may read a message dedicated to you from the previous soul to
-              walk this path, and also commit a note of your own wisdom to the
-              next passer by who finds themself on this trail.
+              Welcome, traveller of the web, to the land of transient messages.
+              It is here you may read a message dedicated to you from the
+              previous soul to walk this path, and also commit a note of your
+              own wisdom to the next passer by who finds themself on this part
+              of the trail.
             </p>
           </div>
           <div

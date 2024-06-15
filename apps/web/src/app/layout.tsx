@@ -4,8 +4,8 @@ import './globals.css';
 import { Providers } from '@/providers';
 
 export const metadata: Metadata = {
-  title: 'Dear Next Visitor',
-  description: 'Single use messages for strangers',
+  title: 'Dear Next Visitor...',
+  description: 'Transient messages for strangers',
 };
 
 export default function RootLayout({

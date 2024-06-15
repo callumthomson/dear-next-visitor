@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, assertResponseOk } from '@/api-client';
 import { FormEvent, useState } from 'react';
 import { ZodError } from 'zod';
@@ -7,6 +7,7 @@ import { MessageDisplay } from '@/components/message-display';
 export const ExchangeSection = () => {
   const [message, setMessage] = useState('');
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const qc = useQueryClient();
   const messageExchangeMutation = useMutation({
     mutationFn: async ({ message }: { message: string }) => {
       const response = await api.exchangeMessage.$post({
@@ -16,6 +17,7 @@ export const ExchangeSection = () => {
       });
       const okResponse = await assertResponseOk(response);
       setErrorMessages([]);
+      await qc.invalidateQueries({ queryKey: ['messageCount'] });
       return await okResponse.json();
     },
     onError: (error: Error) => {
@@ -63,12 +65,20 @@ export const ExchangeSection = () => {
                 Submit
               </button>
             </div>
-            <div>
-              <ul className={'p-2'}>
-                {errorMessages.map((msg, i) => (
-                  <li key={i}>&bull; {msg}</li>
-                ))}
-              </ul>
+            {!!errorMessages.length && (
+              <div>
+                <ul className={'p-2 text-red-500 list-disc pl-5'}>
+                  {errorMessages.map((msg, i) => (
+                    <li key={i}>{msg}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className={'text-xs text-zinc-500 mt-3'}>
+              We make efforts to block abusive or obscene content from being
+              submitted, and also to ensure that messages are of substance but
+              please proceed at your own risk. We do not take responsibility for
+              messages submitted into the system. Thank you for understanding.
             </div>
           </form>
         </>
