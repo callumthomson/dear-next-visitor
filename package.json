@@ -1,5 +1,5 @@
 {
-  "name": "ttnv",
+  "name": "dnv",
   "private": true,
   "scripts": {
     "build": "turbo build",
