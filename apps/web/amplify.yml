@@ -1,0 +1,19 @@
+version: 1
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npx npm install
+        build:
+          commands:
+            - npx turbo run build --filter=web
+      artifacts:
+        baseDirectory: apps/web/.next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - .next/cache/**/*
+          - node_modules/**/*
+      buildPath: /
+    appRoot: apps/web
