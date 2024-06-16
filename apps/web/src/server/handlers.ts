@@ -9,5 +9,5 @@ export const errorHandler: ErrorHandler = (
   c: Context,
 ): Response => {
   console.error(err);
-  return c.json(err, { status: 500 });
+  return c.json(JSON.parse(JSON.stringify(err)), { status: 500 });
 };
