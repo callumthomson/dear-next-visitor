@@ -1,12 +1,26 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { Hono } from 'hono';
-import { handle } from 'hono/vercel';
+import { cors } from 'hono/cors';
+import { serve } from '@hono/node-server';
+import { handle } from 'hono/aws-lambda';
 import { z } from 'zod';
 import { zValidator } from '@hono/zod-validator';
-import { errorHandler, notFoundHandler } from '@/server/handlers';
-import { getMessageCount } from '@/server/db/get-message-count';
-import { exchangeMessage } from '@/server/db/exchange-message';
+import { errorHandler, notFoundHandler } from './handlers';
+import { getMessageCount } from './db/get-message-count';
+import { exchangeMessage } from './db/exchange-message';
 
-const app = new Hono().basePath('/api');
+const app = new Hono();
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    allowHeaders: ['*'],
+    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    exposeHeaders: ['Content-Length'],
+  }),
+);
 
 const appRoutes = app
   .get('/messageCount', async (c) => {
@@ -36,3 +50,12 @@ app.onError(errorHandler);
 app.notFound(notFoundHandler);
 
 export const server = handle(app);
+
+if (typeof process.env.AWS_EXECUTION_ENV == 'undefined') {
+  const port = 3001;
+  console.log(`Server is running on port ${port}`);
+  serve({
+    fetch: app.fetch,
+    port,
+  });
+}

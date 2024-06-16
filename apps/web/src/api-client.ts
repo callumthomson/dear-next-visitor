@@ -1,8 +1,8 @@
 import { ClientResponse, hc } from 'hono/client';
-import { AppRoutes } from '@/server';
+import { AppRoutes } from 'server';
 import { ZodError } from 'zod';
 
-export const { api } = hc<AppRoutes>('http://localhost:3000');
+export const api = hc<AppRoutes>('http://localhost:3001');
 
 export const assertResponseOk = async <T extends ClientResponse<unknown>>(
   response: T,

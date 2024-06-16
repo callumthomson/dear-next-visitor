@@ -1,4 +1,4 @@
-import { ddb, itemKeys } from '@/server/db/ddb';
+import { ddb, itemKeys } from './ddb';
 import { QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 
 const getLatestMessage = async (): Promise<string> => {
@@ -17,7 +17,7 @@ const getLatestMessage = async (): Promise<string> => {
     return response.Items[0].MessageText;
   }
   throw new Error('No latest message found in DynamoDB');
-}
+};
 
 export const exchangeMessage = async (message: string): Promise<string> => {
   const latestMessage = await getLatestMessage();
@@ -35,10 +35,16 @@ export const exchangeMessage = async (message: string): Promise<string> => {
         {
           Update: {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Key: { PK: itemKeys.latestMessage.PK, SK: itemKeys.latestMessage.SK },
+            Key: {
+              PK: itemKeys.latestMessage.PK,
+              SK: itemKeys.latestMessage.SK,
+            },
             UpdateExpression: 'SET MessageText = :newMessage',
             ConditionExpression: 'MessageText = :oldMessage',
-            ExpressionAttributeValues: { ':oldMessage': latestMessage, ':newMessage': message },
+            ExpressionAttributeValues: {
+              ':oldMessage': latestMessage,
+              ':newMessage': message,
+            },
           },
         },
       ],
