@@ -1,11 +1,11 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import { z } from 'zod';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
 import { handle } from 'hono/aws-lambda';
-import { z } from 'zod';
 import { zValidator } from '@hono/zod-validator';
 import { errorHandler, notFoundHandler } from './handlers';
 import { getMessageCount } from './db/get-message-count';
@@ -15,7 +15,7 @@ const app = new Hono();
 
 app.use(
   cors({
-    origin: process.env.APP_ORIGIN || 'http://localhost:3000',
+    origin: ['https://dearnextvisitor.com', 'https://www.dearnextvisitor.com'], // || 'http://localhost:3000',
     allowHeaders: ['*'],
     allowMethods: ['POST', 'GET', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
