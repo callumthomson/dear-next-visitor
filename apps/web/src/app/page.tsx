@@ -31,8 +31,7 @@ export default function Root() {
               Welcome, traveller of the web, to the land of transient messages.
               It is here you may read a message dedicated to you from the
               previous soul to walk this path, and also commit a note of your
-              own wisdom to the next passer by who finds themself on this part
-              of the trail.
+              own wisdom to the next passer by.
             </p>
           </div>
           <div

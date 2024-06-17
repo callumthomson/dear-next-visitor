@@ -23,8 +23,9 @@ export const ExchangeSection = () => {
     onError: (error: Error) => {
       if (error instanceof ZodError) {
         setErrorMessages(error.issues.map((issue) => issue.message));
+      } else {
+        setErrorMessages([error.message]);
       }
-      setErrorMessages([error.message]);
     },
   });
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
