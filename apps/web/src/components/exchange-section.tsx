@@ -10,7 +10,7 @@ export const ExchangeSection = () => {
   const qc = useQueryClient();
   const messageExchangeMutation = useMutation({
     mutationFn: async ({ message }: { message: string }) => {
-      const response = await api.exchangeMessage.$post({
+      const response = await api.messages.exchange.$post({
         json: {
           message,
         },

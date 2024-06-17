@@ -7,7 +7,7 @@ import { ExchangeSection } from '@/components/exchange-section';
 export default function Root() {
   const messageCountData = useQuery({
     queryKey: ['messageCount'],
-    queryFn: () => api.messageCount.$get().then((result) => result.json()),
+    queryFn: () => api.messages.count.$get().then((result) => result.json()),
   });
   return (
     <div className={'flex flex-col items-center justify-between min-h-screen'}>

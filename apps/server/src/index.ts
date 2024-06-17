@@ -15,7 +15,7 @@ const app = new Hono();
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.APP_ORIGIN || 'http://localhost:3000',
     allowHeaders: ['*'],
     allowMethods: ['POST', 'GET', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
@@ -23,11 +23,11 @@ app.use(
 );
 
 const appRoutes = app
-  .get('/messageCount', async (c) => {
+  .get('/messages/count', async (c) => {
     return c.json({ count: await getMessageCount() });
   })
   .post(
-    '/exchangeMessage',
+    '/messages/exchange',
     zValidator(
       'json',
       z.object({
@@ -49,7 +49,7 @@ export type AppRoutes = typeof appRoutes;
 app.onError(errorHandler);
 app.notFound(notFoundHandler);
 
-export const server = handle(app);
+export const handler = handle(app);
 
 if (typeof process.env.AWS_EXECUTION_ENV == 'undefined') {
   const port = 3001;
