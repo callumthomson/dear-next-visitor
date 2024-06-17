@@ -10,6 +10,9 @@ import { zValidator } from '@hono/zod-validator';
 import { errorHandler, notFoundHandler } from './handlers';
 import { getMessageCount } from './db/get-message-count';
 import { exchangeMessage } from './db/exchange-message';
+import { postHogClient } from './posthog';
+import { moderate } from './moderate';
+import { ModerationRejectedError } from './errors/moderation-rejected';
 
 const app = new Hono();
 
@@ -38,7 +41,29 @@ const appRoutes = app
     ),
     async (c) => {
       const { message } = c.req.valid('json');
+      const postHog = postHogClient();
+      const moderationResult = await moderate(message);
+      if (moderationResult.flagged) {
+        postHog.capture({
+          distinctId: 'anonymous',
+          event: 'message-exchange.moderation-rejected',
+          properties: {
+            message,
+            moderator: {
+              categories: moderationResult.categories,
+              category_scores: moderationResult.category_scores,
+            },
+          }
+        });
+        await postHog.shutdown();
+        throw new ModerationRejectedError(moderationResult)
+      }
       const savedMessage = await exchangeMessage(message);
+      postHog.capture({
+        distinctId: 'anonymous',
+        event: 'message-exchange.successful',
+      })
+      await postHog.shutdown();
       return c.json({
         message: savedMessage,
       });

@@ -24,6 +24,7 @@ export const ExchangeSection = () => {
       if (error instanceof ZodError) {
         setErrorMessages(error.issues.map((issue) => issue.message));
       }
+      setErrorMessages([error.message]);
     },
   });
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -55,14 +56,14 @@ export const ExchangeSection = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder={'Dear Next Visitor...'}
                 className={
-                  'bg-zinc-400 w-full min-h-20 py-1 px-2 border-none focus:outline-none text-zinc-800 placeholder:text-zinc-600'
+                  'bg-zinc-400 w-full min-h-20 py-1 px-2 border-none focus:outline-none text-zinc-800 placeholder:text-zinc-600 disabled:opacity-25'
                 }
               />
               <button
-                className={'bg-orange-900 py-3 px-7'}
+                className={'bg-orange-900 py-3 px-7 disabled:opacity-50'}
                 disabled={messageExchangeMutation.isPending}
               >
-                Submit
+                { messageExchangeMutation.isPending ? 'Sending...' : 'Submit' }
               </button>
             </div>
             {!!errorMessages.length && (

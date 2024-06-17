@@ -7,14 +7,18 @@ export const api = hc<AppRoutes>(process.env.NEXT_PUBLIC_API_URL!);
 export const assertResponseOk = async <T extends ClientResponse<unknown>>(
   response: T,
 ): Promise<T> => {
-  if (response.status === 400) {
-    const json = await response.json();
-    if ((json as any).error.name == 'ZodError') {
-      throw new ZodError((json as any).error.issues);
-    }
-  }
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const json: any = await response.json();
+    if (json?.error?.name) {
+      switch (json?.error.name) {
+        case 'ZodError':
+          throw new ZodError(json.error.issues);
+        case 'ModerationRejected':
+          throw new Error(`Moderation Rejected: ${json.error.categories.join(', ')}`);
+        default:
+          throw new Error(response.statusText);
+      }
+    }
   }
   return response;
 };

@@ -13,6 +13,7 @@ import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as certificates from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53targets from 'aws-cdk-lib/aws-route53-targets';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -20,9 +21,9 @@ export class CdkStack extends cdk.Stack {
 
     const config = {
       domain: 'dearnextvisitor.com',
+      openAiApiKeyParameterName: 'dnv.openai-key',
       // Imported because it's created in a different region (required by CloudFront)
-      cloudFrontCertificateArn:
-        `arn:aws:acm:us-east-1:${process.env.CDK_DEFAULT_ACCOUNT}:certificate/300dbc19-ec44-46da-9b68-da07b23ed5b9`,
+      cloudFrontCertificateArn: `arn:aws:acm:us-east-1:${process.env.CDK_DEFAULT_ACCOUNT}:certificate/300dbc19-ec44-46da-9b68-da07b23ed5b9`,
       hostedZoneId: 'Z06681671VI0LTB04CUUM',
     } as const;
 
@@ -83,7 +84,7 @@ export class CdkStack extends cdk.Stack {
           origin: new cloudfront_origins.S3Origin(webBucket),
           cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
           compress: true,
-        }
+        },
       },
       domainNames: [`www.${config.domain}`, config.domain],
       certificate: certificates.Certificate.fromCertificateArn(
@@ -106,6 +107,14 @@ export class CdkStack extends cdk.Stack {
       ),
     });
 
+    const ssmOpenAiParameter = ssm.StringParameter.fromSecureStringParameterAttributes(
+      this,
+      'SsmParamaterOpenAiToken',
+      {
+        parameterName: config.openAiApiKeyParameterName,
+      },
+    );
+
     const serverFunction = new NodejsFunction(this, 'LambdaServerFunction', {
       functionName: 'dnv-server-function',
       entry: path.resolve(__dirname, '../../server/src/index.ts'),
@@ -113,12 +122,14 @@ export class CdkStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_20_X,
       environment: {
         DYNAMODB_TABLE_NAME: ddbTable.tableName,
+        POSTHOG_KEY: 'phc_S8wR0LhS6z30om4UBirN1wpOc5jyrBALur4Apdw8HJ5',
       },
     });
     serverFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
     ddbTable.grantReadWriteData(serverFunction);
+    ssmOpenAiParameter.grantRead(serverFunction);
 
     const certificate = new certificates.Certificate(
       this,
