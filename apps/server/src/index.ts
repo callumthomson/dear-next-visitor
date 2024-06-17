@@ -15,7 +15,7 @@ const app = new Hono();
 
 app.use(
   cors({
-    origin: ['https://dearnextvisitor.com', 'https://www.dearnextvisitor.com'], // || 'http://localhost:3000',
+    origin: typeof process.env.AWS_EXECUTION_ENV == 'undefined' ? 'http://localhost:3000' : ['https://dearnextvisitor.com', 'https://www.dearnextvisitor.com'],
     allowHeaders: ['*'],
     allowMethods: ['POST', 'GET', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],

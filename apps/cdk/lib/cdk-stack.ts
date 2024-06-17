@@ -78,6 +78,13 @@ export class CdkStack extends cdk.Stack {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         compress: true,
       },
+      additionalBehaviors: {
+        '/_next/*': {
+          origin: new cloudfront_origins.S3Origin(webBucket),
+          cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+          compress: true,
+        }
+      },
       domainNames: [`www.${config.domain}`, config.domain],
       certificate: certificates.Certificate.fromCertificateArn(
         this,
