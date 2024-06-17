@@ -12,10 +12,10 @@ export default function Root() {
   return (
     <div className={'flex flex-col items-center justify-between min-h-screen'}>
       <div
-        className={`bg-zinc-800 w-full p-3 flex justify-between text-3xl ${handFont.className}`}
+        className={`bg-zinc-800 w-full p-3 flex flex-col sm:flex-row justify-between text-3xl ${handFont.className}`}
       >
         <div>Dear Next Visitor</div>
-        <div>
+        <div className={'text-right'}>
           {messageCountData.data ? (
             <>{messageCountData.data.count} Messages Delivered</>
           ) : (
@@ -37,7 +37,7 @@ export default function Root() {
           </div>
           <div
             className={
-              'bg-zinc-800 p-5 my-3 rounded ml-5 text-5xl flex flex-col justify-center'
+              'bg-zinc-800 p-5 my-3 rounded ml-5 text-5xl hidden sm:flex flex-col justify-center'
             }
           >
             📓
