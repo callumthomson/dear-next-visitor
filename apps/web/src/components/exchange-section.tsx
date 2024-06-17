@@ -63,7 +63,7 @@ export const ExchangeSection = () => {
                 className={'bg-orange-900 py-3 px-7 disabled:opacity-50'}
                 disabled={messageExchangeMutation.isPending}
               >
-                { messageExchangeMutation.isPending ? 'Sending...' : 'Submit' }
+                {messageExchangeMutation.isPending ? 'Sending...' : 'Submit'}
               </button>
             </div>
             {!!errorMessages.length && (
@@ -76,10 +76,10 @@ export const ExchangeSection = () => {
               </div>
             )}
             <div className={'text-xs text-zinc-500 mt-3'}>
-              We make efforts to block abusive or obscene content from being
-              submitted, and also to ensure that messages are of substance but
-              please proceed at your own risk. We do not take responsibility for
-              messages submitted into the system. Thank you for understanding.
+              Submitted messages are automatically moderated for abuse but
+              abusive/obscene messages may still make it through. Please proceed
+              at your own risk, as I do not take responsibility for messages
+              submitted into the system. Thank you for understanding!
             </div>
           </form>
         </>

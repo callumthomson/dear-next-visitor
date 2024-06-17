@@ -16,16 +16,17 @@ import * as route53targets from 'aws-cdk-lib/aws-route53-targets';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
 
 export class CdkStack extends cdk.Stack {
+
+  private readonly config = {
+    domain: 'dearnextvisitor.com',
+    openAiApiKeyParameterName: 'dnv.openai-key',
+    // Imported because it's created in a different region (required by CloudFront)
+    cloudFrontCertificateArn: `arn:aws:acm:us-east-1:${process.env.CDK_DEFAULT_ACCOUNT}:certificate/300dbc19-ec44-46da-9b68-da07b23ed5b9`,
+    hostedZoneId: 'Z06681671VI0LTB04CUUM',
+  } as const;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    const config = {
-      domain: 'dearnextvisitor.com',
-      openAiApiKeyParameterName: 'dnv.openai-key',
-      // Imported because it's created in a different region (required by CloudFront)
-      cloudFrontCertificateArn: `arn:aws:acm:us-east-1:${process.env.CDK_DEFAULT_ACCOUNT}:certificate/300dbc19-ec44-46da-9b68-da07b23ed5b9`,
-      hostedZoneId: 'Z06681671VI0LTB04CUUM',
-    } as const;
 
     const ddbTable = new ddb.TableV2(this, 'DynamoDbTable', {
       tableName: 'DNV',
@@ -66,8 +67,8 @@ export class CdkStack extends cdk.Stack {
       this,
       'DnsZone',
       {
-        hostedZoneId: config.hostedZoneId,
-        zoneName: config.domain,
+        hostedZoneId: this.config.hostedZoneId,
+        zoneName: this.config.domain,
       },
     );
 
@@ -86,11 +87,11 @@ export class CdkStack extends cdk.Stack {
           compress: true,
         },
       },
-      domainNames: [`www.${config.domain}`, config.domain],
+      domainNames: [`www.${this.config.domain}`, this.config.domain],
       certificate: certificates.Certificate.fromCertificateArn(
         this,
         'DomainCertificateForCloudFront',
-        config.cloudFrontCertificateArn,
+        this.config.cloudFrontCertificateArn,
       ),
     });
     new route53.ARecord(this, 'ARecordRoot', {
@@ -111,7 +112,7 @@ export class CdkStack extends cdk.Stack {
       this,
       'SsmParamaterOpenAiToken',
       {
-        parameterName: config.openAiApiKeyParameterName,
+        parameterName: this.config.openAiApiKeyParameterName,
       },
     );
 
@@ -135,14 +136,14 @@ export class CdkStack extends cdk.Stack {
       this,
       'DomainCertificateForApiGw',
       {
-        domainName: config.domain,
-        subjectAlternativeNames: [`*.${config.domain}`],
+        domainName: this.config.domain,
+        subjectAlternativeNames: [`*.${this.config.domain}`],
         validation: certificates.CertificateValidation.fromDns(domainZone),
       },
     );
 
     const apiDomainName = new apigwv2.DomainName(this, 'ApiCustomDomain', {
-      domainName: `api.${config.domain}`,
+      domainName: `api.${this.config.domain}`,
       certificate,
     });
 
