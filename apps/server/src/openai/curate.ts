@@ -12,7 +12,7 @@ const prompt =
   '- Spam is prohibited\n' +
   '- Gibberish or unreadable/nonsensical messages are prohibited\n' +
   '- Links are prohibited\n' +
-  '- Funny or humorous messages are encouraged\n' +
+  '- Funny or humorous messages are encouraged, but not required at all\n' +
   '\n' +
   "Moderation for offensive messages is performed separately so there is no need to reject offensive messages.  \n" +
   "Rate the provided text as pass or fail. Only provide JSON in your response. A single object with keys  'pass' (boolean) and 'reason' (string or null).\n" +
