@@ -1,7 +1,7 @@
-import { ModerationResult } from '../moderate';
+import OpenAI from 'openai';
 
 export class ModerationRejectedError extends Error {
-  constructor(public data: ModerationResult) {
+  constructor(public data: OpenAI.Moderation) {
     super();
   }
 }

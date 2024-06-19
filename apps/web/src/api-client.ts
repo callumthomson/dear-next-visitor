@@ -16,7 +16,7 @@ export const assertResponseOk = async <T extends ClientResponse<unknown>>(
         case 'ModerationRejected':
           throw new Error(`Moderation Rejected: ${json.error.categories.join(', ')}`);
         default:
-          throw new Error(response.statusText);
+          throw new Error(json.error.message || response.statusText);
       }
     }
   }

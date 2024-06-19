@@ -10,15 +10,20 @@ import { zValidator } from '@hono/zod-validator';
 import { errorHandler, notFoundHandler } from './handlers';
 import { getMessageCount } from './db/get-message-count';
 import { exchangeMessage } from './db/exchange-message';
-import { postHogClient } from './posthog';
-import { moderate } from './moderate';
+import { moderate } from './openai/moderate';
 import { ModerationRejectedError } from './errors/moderation-rejected';
+import { curate } from './openai/curate';
+import { CurationRejectedError } from './errors/curation-rejected';
+import * as capture from './posthog/capture';
 
 const app = new Hono();
 
 app.use(
   cors({
-    origin: typeof process.env.AWS_EXECUTION_ENV == 'undefined' ? 'http://localhost:3000' : ['https://dearnextvisitor.com', 'https://www.dearnextvisitor.com'],
+    origin:
+      typeof process.env.AWS_EXECUTION_ENV == 'undefined'
+        ? 'http://localhost:3000'
+        : ['https://dearnextvisitor.com', 'https://www.dearnextvisitor.com'],
     allowHeaders: ['*'],
     allowMethods: ['POST', 'GET', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
@@ -26,9 +31,11 @@ app.use(
 );
 
 const appRoutes = app
+
   .get('/messages/count', async (c) => {
     return c.json({ count: await getMessageCount() });
   })
+
   .post(
     '/messages/exchange',
     zValidator(
@@ -41,29 +48,18 @@ const appRoutes = app
     ),
     async (c) => {
       const { message } = c.req.valid('json');
-      const postHog = postHogClient();
       const moderationResult = await moderate(message);
       if (moderationResult.flagged) {
-        postHog.capture({
-          distinctId: 'anonymous',
-          event: 'message-exchange.moderation-rejected',
-          properties: {
-            message,
-            moderator: {
-              categories: moderationResult.categories,
-              category_scores: moderationResult.category_scores,
-            },
-          }
-        });
-        await postHog.shutdown();
-        throw new ModerationRejectedError(moderationResult)
+        await capture.moderationRejected(message, moderationResult);
+        throw new ModerationRejectedError(moderationResult);
+      }
+      const curation = await curate(message);
+      if (!curation.pass) {
+        await capture.curationRejected(message, curation);
+        throw new CurationRejectedError(curation.reason || 'Curation rejected');
       }
       const savedMessage = await exchangeMessage(message);
-      postHog.capture({
-        distinctId: 'anonymous',
-        event: 'message-exchange.successful',
-      })
-      await postHog.shutdown();
+      await capture.messageExchangeSuccessful();
       return c.json({
         message: savedMessage,
       });
