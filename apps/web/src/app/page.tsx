@@ -24,24 +24,6 @@ export default function Root() {
         </div>
       </div>
       <div className={'text-zinc-300 p-4 w-full max-w-screen-md'}>
-        <h1 className={'text-4xl font-bold'}>Dear Next Visitor...</h1>
-        <div className={'flex'}>
-          <div className={'bg-zinc-800 p-5 my-3 rounded'}>
-            <p>
-              Welcome, traveller of the web, to the land of transient messages.
-              It is here you may read a message dedicated to you from the
-              previous soul to walk this path, and also commit a note of your
-              own wisdom to the next passer by.
-            </p>
-          </div>
-          <div
-            className={
-              'bg-zinc-800 p-5 my-3 rounded ml-5 text-5xl hidden sm:flex flex-col justify-center'
-            }
-          >
-            📓
-          </div>
-        </div>
         <ExchangeSection />
       </div>
       <div className={'bg-zinc-800 w-full p-3 flex justify-between'}>

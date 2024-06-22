@@ -11,10 +11,11 @@ const prompt =
   'The rules for the text which you are judging:\n' +
   '- Spam is prohibited\n' +
   '- Gibberish or unreadable/nonsensical messages are prohibited\n' +
-  '- Links are prohibited\n' +
+  '- Web links are prohibited\n' +
   '- Funny or humorous messages are encouraged, but not required at all\n' +
   '\n' +
   "Moderation for offensive messages is performed separately so there is no need to reject offensive messages.  \n" +
+  "Do not filter out messages for any reasons other than the reasons defined above.  \n" +
   "Rate the provided text as pass or fail. Only provide JSON in your response. A single object with keys  'pass' (boolean) and 'reason' (string or null).\n" +
   "Reason should always be null if 'pass' is true.";
 

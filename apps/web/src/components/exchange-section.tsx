@@ -39,7 +39,7 @@ export const ExchangeSection = () => {
       ) : (
         <>
           <h2 className={'text-3xl mb-4 font-bold'}>Give One, Take One</h2>
-          <p className={'italic my-4'}>
+          <p className={'italic'}>
             There is a message waiting that has been written just for you...
           </p>
           <p className={'my-4'}>
