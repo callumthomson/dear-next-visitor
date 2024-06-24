@@ -28,25 +28,43 @@ export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // Imported because it's created by default when purchasing a domain.
+    const domainZone = route53.HostedZone.fromHostedZoneAttributes(
+      this,
+      'DnsZone',
+      {
+        hostedZoneId: this.config.hostedZoneId,
+        zoneName: this.config.domain,
+      },
+    );
+    const ssmOpenAiParameter = ssm.StringParameter.fromSecureStringParameterAttributes(
+      this,
+      'SsmParamaterOpenAiToken',
+      {
+        parameterName: this.config.openAiApiKeyParameterName,
+      },
+    );
+    const certificateForCloudFront = certificates.Certificate.fromCertificateArn(
+      this,
+      'DomainCertificateForCloudFront',
+      this.config.cloudFrontCertificateArn,
+    );
+    const certificateForApiGw = new certificates.Certificate(
+      this,
+      'DomainCertificateForApiGw',
+      {
+        domainName: this.config.domain,
+        subjectAlternativeNames: [`*.${this.config.domain}`],
+        validation: certificates.CertificateValidation.fromDns(domainZone),
+      },
+    );
+
     const ddbTable = new ddb.TableV2(this, 'DynamoDbTable', {
       tableName: 'DNV',
       partitionKey: { name: 'PK', type: ddb.AttributeType.STRING },
       sortKey: { name: 'SK', type: ddb.AttributeType.STRING },
       billing: ddb.Billing.onDemand(),
       encryption: ddb.TableEncryptionV2.awsManagedKey(),
-      globalSecondaryIndexes: [
-        {
-          indexName: 'GSI1',
-          partitionKey: {
-            name: 'GSI1PK',
-            type: ddb.AttributeType.STRING,
-          },
-          sortKey: {
-            name: 'GSI1SK',
-            type: ddb.AttributeType.STRING,
-          },
-        },
-      ],
     });
 
     const webBucket = new s3.Bucket(this, 'S3Bucket', {
@@ -62,17 +80,7 @@ export class CdkStack extends cdk.Stack {
       prune: true,
     });
 
-    // Imported because it's created by default when purchasing a domain.
-    const domainZone = route53.HostedZone.fromHostedZoneAttributes(
-      this,
-      'DnsZone',
-      {
-        hostedZoneId: this.config.hostedZoneId,
-        zoneName: this.config.domain,
-      },
-    );
-
-    const cdn = new cloudfront.Distribution(this, 'WebDistribution', {
+    const webCdn = new cloudfront.Distribution(this, 'WebDistribution', {
       defaultRootObject: 'index.html',
       defaultBehavior: {
         origin: new cloudfront_origins.S3Origin(webBucket),
@@ -88,33 +96,21 @@ export class CdkStack extends cdk.Stack {
         },
       },
       domainNames: [`www.${this.config.domain}`, this.config.domain],
-      certificate: certificates.Certificate.fromCertificateArn(
-        this,
-        'DomainCertificateForCloudFront',
-        this.config.cloudFrontCertificateArn,
-      ),
+      certificate: certificateForCloudFront,
     });
     new route53.ARecord(this, 'ARecordRoot', {
       zone: domainZone,
       target: route53.RecordTarget.fromAlias(
-        new route53targets.CloudFrontTarget(cdn),
+        new route53targets.CloudFrontTarget(webCdn),
       ),
     });
     new route53.ARecord(this, 'ARecordWww', {
       recordName: 'www',
       zone: domainZone,
       target: route53.RecordTarget.fromAlias(
-        new route53targets.CloudFrontTarget(cdn),
+        new route53targets.CloudFrontTarget(webCdn),
       ),
     });
-
-    const ssmOpenAiParameter = ssm.StringParameter.fromSecureStringParameterAttributes(
-      this,
-      'SsmParamaterOpenAiToken',
-      {
-        parameterName: this.config.openAiApiKeyParameterName,
-      },
-    );
 
     const serverFunction = new NodejsFunction(this, 'LambdaServerFunction', {
       functionName: 'dnv-server-function',
@@ -127,25 +123,15 @@ export class CdkStack extends cdk.Stack {
         POSTHOG_KEY: 'phc_S8wR0LhS6z30om4UBirN1wpOc5jyrBALur4Apdw8HJ5',
       },
     });
-    serverFunction.addFunctionUrl({
+    const serverFunctionUrl = serverFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
     ddbTable.grantReadWriteData(serverFunction);
     ssmOpenAiParameter.grantRead(serverFunction);
 
-    const certificate = new certificates.Certificate(
-      this,
-      'DomainCertificateForApiGw',
-      {
-        domainName: this.config.domain,
-        subjectAlternativeNames: [`*.${this.config.domain}`],
-        validation: certificates.CertificateValidation.fromDns(domainZone),
-      },
-    );
-
     const apiDomainName = new apigwv2.DomainName(this, 'ApiCustomDomain', {
       domainName: `api.${this.config.domain}`,
-      certificate,
+      certificate: certificateForApiGw,
     });
 
     const api = new apigwv2.HttpApi(this, 'HttpApi', {
