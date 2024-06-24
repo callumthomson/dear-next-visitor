@@ -64,7 +64,7 @@ export class CdkStack extends cdk.Stack {
       partitionKey: { name: 'PK', type: ddb.AttributeType.STRING },
       sortKey: { name: 'SK', type: ddb.AttributeType.STRING },
       billing: ddb.Billing.onDemand(),
-      encryption: ddb.TableEncryptionV2.awsManagedKey(),
+      encryption: ddb.TableEncryptionV2.dynamoOwnedKey(),
     });
 
     const webBucket = new s3.Bucket(this, 'S3Bucket', {
