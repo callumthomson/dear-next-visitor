@@ -17,7 +17,7 @@ export default function Root() {
         <div>Dear Next Visitor</div>
         <div className={'text-right'}>
           {messageCountData.data ? (
-            <>{messageCountData.data.count} Messages Delivered</>
+            <>{messageCountData.data.count.toLocaleString()} Messages Delivered</>
           ) : (
             <></>
           )}

@@ -52,6 +52,7 @@ export const ExchangeSection = () => {
           <form onSubmit={onSubmit}>
             <div className={'flex flex-col sm:flex-row'}>
               <textarea
+                autoFocus={true}
                 disabled={messageExchangeMutation.isPending}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -63,6 +64,7 @@ export const ExchangeSection = () => {
               <button
                 className={'bg-orange-900 py-3 px-7 disabled:opacity-50'}
                 disabled={messageExchangeMutation.isPending}
+                type={'submit'}
               >
                 {messageExchangeMutation.isPending ? 'Sending...' : 'Submit'}
               </button>
