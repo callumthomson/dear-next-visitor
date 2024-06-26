@@ -117,6 +117,7 @@ export class CdkStack extends cdk.Stack {
       entry: path.resolve(__dirname, '../../server/src/index.ts'),
       handler: 'handler',
       runtime: lambda.Runtime.NODEJS_20_X,
+      reservedConcurrentExecutions: 5,
       timeout: cdk.Duration.seconds(10),
       environment: {
         DYNAMODB_TABLE_NAME: ddbTable.tableName,
