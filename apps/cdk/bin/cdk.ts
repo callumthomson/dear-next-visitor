@@ -2,7 +2,6 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { CdkStack } from '../lib/cdk-stack';
-import { Tags } from 'aws-cdk-lib';
 
 const app = new cdk.App();
 const stack = new CdkStack(app, 'DearNextVisitorStack', {
@@ -23,6 +22,6 @@ const stack = new CdkStack(app, 'DearNextVisitorStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
-Tags.of(stack).add('Project', 'dear-next-visitor');
-Tags.of(stack).add('Environment', 'prod');
-Tags.of(stack).add('Repo', 'callumthomson/dear-next-visitor');
+cdk.Tags.of(stack).add('Project', 'dear-next-visitor');
+cdk.Tags.of(stack).add('Environment', 'prod');
+cdk.Tags.of(stack).add('Repo', 'callumthomson/dear-next-visitor');
