@@ -25,3 +25,4 @@ const stack = new CdkStack(app, 'DearNextVisitorStack', {
 cdk.Tags.of(stack).add('Project', 'dear-next-visitor');
 cdk.Tags.of(stack).add('Environment', 'prod');
 cdk.Tags.of(stack).add('Repo', 'callumthomson/dear-next-visitor');
+cdk.Tags.of(stack).add('IaC', 'cdk');
