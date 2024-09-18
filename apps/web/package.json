@@ -11,7 +11,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.45.0",
     "env-cmd": "^10.1.0",
-    "next": "14.2.4",
+    "next": "14.2.10",
     "posthog-js": "^1.139.2",
     "prettier": "^3.3.2",
     "react": "^18",
