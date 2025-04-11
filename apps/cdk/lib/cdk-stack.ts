@@ -81,10 +81,11 @@ export class CdkStack extends cdk.Stack {
     });
 
     const webCdn = new cloudfront.Distribution(this, 'WebDistribution', {
+      comment: 'Dear Next Visitor',
       defaultRootObject: 'index.html',
       defaultBehavior: {
         origin: new cloudfront_origins.S3Origin(webBucket),
-        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         compress: true,
       },
