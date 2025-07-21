@@ -1,41 +1,39 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api, assertResponseOk } from '@/api-client';
+'use client'
+
 import { FormEvent, useState } from 'react';
-import { ZodError } from 'zod';
 import { MessageDisplay } from '@/components/message-display';
+import { exchangeMessageAction } from '@/actions/exchange-message.action';
 
 export const ExchangeSection = () => {
-  const [message, setMessage] = useState('');
+  const [myMessage, setMyMessage] = useState('');
+  const [receivedMessage, setReceivedMessage] = useState<undefined | string>();
+  const [isPending, setIsPending] = useState<boolean>(false)
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
-  const qc = useQueryClient();
-  const messageExchangeMutation = useMutation({
-    mutationFn: async ({ message }: { message: string }) => {
-      const response = await api.messages.exchange.$post({
-        json: {
-          message,
-        },
-      });
-      const okResponse = await assertResponseOk(response);
-      setErrorMessages([]);
-      await qc.invalidateQueries({ queryKey: ['messageCount'] });
-      return await okResponse.json();
-    },
-    onError: (error: Error) => {
-      if (error instanceof ZodError) {
-        setErrorMessages(error.issues.map((issue) => issue.message));
-      } else {
-        setErrorMessages([error.message]);
-      }
-    },
-  });
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    messageExchangeMutation.mutate({ message });
+    // messageExchangeMutation.mutate({ message });
+    setIsPending(true);
+    exchangeMessageAction({ message: myMessage }).then((response) => {
+      if (response.message) {
+        setErrorMessages([])
+        setMyMessage('')
+        setReceivedMessage(response.message)
+      }
+      if (response.error) {
+        setErrorMessages(response.error.messages)
+        setMyMessage('')
+      }
+    }).catch((err) => {
+      setErrorMessages(['Sorry an unknown error occurred. Please try again later.'])
+    }).finally(() => {
+      setIsPending(false)
+    });
   };
   return (
     <div className={'bg-zinc-800 p-5 my-3 rounded'}>
-      {messageExchangeMutation.isSuccess ? (
-        <MessageDisplay message={messageExchangeMutation.data.message} />
+      {receivedMessage ? (
+        <MessageDisplay message={receivedMessage} />
       ) : (
         <>
           <h2 className={'text-3xl mb-4 font-bold'}>Give One, Take One</h2>
@@ -53,9 +51,9 @@ export const ExchangeSection = () => {
             <div className={'flex flex-col sm:flex-row'}>
               <textarea
                 autoFocus={true}
-                disabled={messageExchangeMutation.isPending}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                disabled={isPending}
+                value={myMessage}
+                onChange={(e) => setMyMessage(e.target.value)}
                 placeholder={'Dear Next Visitor...'}
                 className={
                   'bg-zinc-400 w-full min-h-20 py-1 px-2 border-none focus:outline-none text-zinc-800 placeholder:text-zinc-600 disabled:opacity-25'
@@ -63,10 +61,10 @@ export const ExchangeSection = () => {
               />
               <button
                 className={'bg-orange-900 py-3 px-7 disabled:opacity-50'}
-                disabled={messageExchangeMutation.isPending}
+                disabled={isPending}
                 type={'submit'}
               >
-                {messageExchangeMutation.isPending ? 'Sending...' : 'Submit'}
+                {isPending ? 'Sending...' : 'Submit'}
               </button>
             </div>
             {!!errorMessages.length && (

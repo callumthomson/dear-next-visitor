@@ -1,14 +1,18 @@
-'use client';
-import { useQuery } from '@tanstack/react-query';
 import { handFont } from '@/fonts';
-import { api } from '@/api-client';
+
 import { ExchangeSection } from '@/components/exchange-section';
+import { Suspense, use, FC } from 'react';
+import { getMessageCount } from '@/lib/db/get-message-count';
+
+const MessageCountDisplay: FC<{ countPromise: Promise<number> }> = ({ countPromise }) => {
+  const count = use(countPromise)
+  return (
+    <>{count.toLocaleString()} Messages Delivered</>
+  )
+}
 
 export default function Root() {
-  const messageCountData = useQuery({
-    queryKey: ['messageCount'],
-    queryFn: () => api.messages.count.$get().then((result) => result.json()),
-  });
+  const messageCountPromise = getMessageCount()
   return (
     <div className={'flex flex-col items-center justify-between min-h-screen'}>
       <div
@@ -16,11 +20,9 @@ export default function Root() {
       >
         <div>Dear Next Visitor</div>
         <div className={'text-right'}>
-          {messageCountData.data ? (
-            <>{messageCountData.data.count.toLocaleString()} Messages Delivered</>
-          ) : (
-            <></>
-          )}
+          <Suspense>
+            <MessageCountDisplay countPromise={messageCountPromise} />
+          </Suspense>
         </div>
       </div>
       <div className={'text-zinc-300 p-4 w-full max-w-screen-md'}>

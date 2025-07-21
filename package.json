@@ -1,23 +1,30 @@
 {
-  "name": "dnv",
+  "name": "dear-next-visitor",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.598.0",
+    "@aws-sdk/lib-dynamodb": "3.598.0",
+    "next": "15.4.2",
+    "openai": "4.51.0",
+    "posthog-js": "1.235.6",
+    "posthog-node": "4.0.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "zod": "3.23.8"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
-    "turbo": "latest",
-    "typescript": "^5.4.5"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "npm@10.5.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "8",
+    "tailwindcss": "3.4.4"
+  }
 }
