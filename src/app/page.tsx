@@ -9,6 +9,8 @@ async function MessageCountDisplay() {
   return <>{count.toLocaleString()} Messages Delivered</>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export default function Root() {
   return (
     <div className={'flex flex-col items-center justify-between min-h-screen'}>
