@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+ children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -19,7 +19,7 @@ export default function RootLayout({
         lang="en"
         className={`bg-zinc-700 ${handFont.variable} ${bodyFont.variable}`}
       >
-        <body>{children}</body>
+      <body>{children}</body>
       </html>
     </Providers>
   );
