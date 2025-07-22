@@ -6,6 +6,7 @@
       "dependencies": {
         "@aws-sdk/client-dynamodb": "3.598.0",
         "@aws-sdk/lib-dynamodb": "3.598.0",
+        "@vercel/functions": "2.2.4",
         "next": "15.4.2",
         "openai": "4.51.0",
         "posthog-js": "1.235.6",
@@ -260,6 +261,8 @@
     "@types/react": ["@types/react@19.1.8", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-AwAfQ2Wa5bCx9WP8nZL2uMZWod7J7/JSplxbTmBQ5ms6QpqNYm672H0Vu9ZVKVngQ+ii4R/byguVEUZQyeg44g=="],
 
     "@types/react-dom": ["@types/react-dom@19.1.6", "", { "peerDependencies": { "@types/react": "^19.0.0" } }, "sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw=="],
+
+    "@vercel/functions": ["@vercel/functions@2.2.4", "", { "peerDependencies": { "@aws-sdk/credential-provider-web-identity": "*" }, "optionalPeers": ["@aws-sdk/credential-provider-web-identity"] }, "sha512-dol8/MiNG9u7/FSPumYEEl2MJijXBxhKoBJpY83Sqay1VWi4XngaWzBkzSut0SCL4DVVRLtZNEcCkj2/vW3LMg=="],
 
     "abort-controller": ["abort-controller@3.0.0", "", { "dependencies": { "event-target-shim": "^5.0.0" } }, "sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg=="],
 
