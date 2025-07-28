@@ -12,7 +12,6 @@ export const ExchangeSection = () => {
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // messageExchangeMutation.mutate({ message });
     setIsPending(true);
     exchangeMessageAction({ message: myMessage }).then((response) => {
       if (response.message) {
@@ -22,7 +21,6 @@ export const ExchangeSection = () => {
       }
       if (response.error) {
         setErrorMessages(response.error.messages)
-        setMyMessage('')
       }
     }).catch((err) => {
       setErrorMessages(['Sorry an unknown error occurred. Please try again later.'])
