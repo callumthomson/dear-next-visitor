@@ -1,6 +1,6 @@
 services:
   dearnextvisitor:
-    image: nginx:latest # TODO
+    image: ghcr.io/callumthomson/dear-next-visitor:latest
     secrets:
       - openai_api_key
     networks:
