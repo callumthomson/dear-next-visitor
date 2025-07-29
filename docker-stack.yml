@@ -1,6 +1,6 @@
 services:
   dearnextvisitor:
-    image: ghcr.io/callumthomson/dear-next-visitor:sha-b325b5a
+    image: ghcr.io/callumthomson/dear-next-visitor:sha-1ae3b72
     secrets:
       - openai_api_key
     networks:
