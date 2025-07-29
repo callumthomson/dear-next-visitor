@@ -1,14 +1,13 @@
 services:
   dearnextvisitor:
-    image: ghcr.io/callumthomson/dear-next-visitor:latest
+    image: ghcr.io/callumthomson/dear-next-visitor:sha-b325b5a
     secrets:
       - openai_api_key
     networks:
       - dnv-network
-      - web-network
     environment:
       NEXT_PUBLIC_POSTHOG_KEY: phc_S8wR0LhS6z30om4UBirN1wpOc5jyrBALur4Apdw8HJ5
-      OPENAI_API_KEY_FILE: /run/secrets/openai_api_key
+      SECRETS_DIR: /run/secrets/
       VALKEY_URL: valkey://valkey:6379
     deploy:
       replicas: 2
@@ -48,6 +47,3 @@ networks:
   dnv-network:
     driver: overlay
     attachable: true
-  web-network:
-    name: web-stack_web-network
-    external: true
