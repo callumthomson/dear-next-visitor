@@ -1,34 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dear Next Visitor
 
-## Getting Started
+A tiny social experiment in kindness and serendipity. Leave a message for the next visitor and receive the previous visitor’s message in return. One-in, one-out. Anonymous, ephemeral, and lightly moderated for safety.
 
-First, run the development server:
+Visit the site: https://dearnextvisitor.com
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+What is this?
+- A small place on the internet to pass along a thought to a stranger.
+- No accounts, no feeds, no likes. Just a single message, passed from person to person.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+How it works
+1. You write a short note for the next visitor.
+2. After you submit, you receive the note left by the person before you.
+3. Your note becomes the next thing a stranger will read.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Why it exists
+- To encourage small acts of connection between people who don’t know each other.
+- To create a quiet space on the web with no friction and no agenda.
+- To remind us that words can travel far in simple ways.
 
-## Learn More
+Safety & privacy
+- Messages are anonymous and transient. Please don’t include personal information.
+- Automated checks reduce obvious abuse, but nothing is perfect. Proceed kindly.
+- High-level analytics help understand usage, but there’s no user tracking or accounts.
 
-To learn more about Next.js, take a look at the following resources:
+Questions
+- What can I write? Anything thoughtful, kind, funny, or sincere. Avoid spam, links, and personal data.
+- Can I read more than one message? No, the exchange is one-to-one by design.
+- Is this open source? Yes, the code is here for transparency and curiosity.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Credits
+- Created by Callum Thomson (https://github.com/callumthomson).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For developers
+- The source code is provided for reference only. Most people won’t need to run it locally.
+- If you’re exploring the internals, start with src/app and src/components.
