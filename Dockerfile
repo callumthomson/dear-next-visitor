@@ -21,10 +21,13 @@ RUN bun run build
 # Production stage
 FROM oven/bun:1-slim AS runner
 
+ARG POSTHOG_KEY
+
 WORKDIR /app
 
 # Set environment variables
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_POSTHOG_KEY=$POSTHOG_KEY
 
 # Copy necessary files from builder stage
 COPY --from=builder /app/next.config.ts ./

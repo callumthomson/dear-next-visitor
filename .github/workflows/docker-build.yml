@@ -48,3 +48,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            POSTHOG_KEY=${{ vars.POSTHOG_KEY }}

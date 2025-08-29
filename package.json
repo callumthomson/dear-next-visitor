@@ -12,7 +12,7 @@
     "@vercel/functions": "2.2.4",
     "iovalkey": "0.3.3",
     "next": "15.4.2",
-    "openai": "4.51.0",
+    "openai": "5.16.0",
     "posthog-js": "1.235.6",
     "posthog-node": "4.0.1",
     "react": "19.1.0",

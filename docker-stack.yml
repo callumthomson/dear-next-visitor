@@ -6,7 +6,6 @@ services:
     networks:
       - dnv-network
     environment:
-      NEXT_PUBLIC_POSTHOG_KEY: phc_S8wR0LhS6z30om4UBirN1wpOc5jyrBALur4Apdw8HJ5
       SECRETS_DIR: /run/secrets/
       VALKEY_URL: valkey://valkey:6379
     deploy:
