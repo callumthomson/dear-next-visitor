@@ -1,6 +1,6 @@
 services:
   dearnextvisitor:
-    image: ghcr.io/callumthomson/dear-next-visitor:sha-94fd20d
+    image: ghcr.io/callumthomson/dear-next-visitor:sha-9c907ca
     secrets:
       - openai_api_key
     networks:
@@ -26,6 +26,8 @@ services:
       --appendonly yes
       --appendfsync always
       --dir /data
+    ports:
+      - "6379:6379"
     deploy:
       replicas: 1
       placement:
