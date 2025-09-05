@@ -39,10 +39,10 @@ export const exchangeMessageAction = async (props: ExchangeMessageActionProps) =
       },
     }
   }
-  const savedMessage = await exchangeMessage(message);
+  const { previousMessage } = await exchangeMessage(message);
   await capture.messageExchangeSuccessful();
   revalidatePath('/')
   return {
-    message: savedMessage,
+    message: previousMessage,
   };
 }

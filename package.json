@@ -9,11 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "3.598.0",
-    "@aws-sdk/lib-dynamodb": "3.598.0",
     "@vercel/functions": "2.2.4",
+    "iovalkey": "0.3.3",
     "next": "15.4.2",
-    "openai": "4.51.0",
+    "openai": "5.16.0",
     "posthog-js": "1.235.6",
     "posthog-node": "4.0.1",
     "react": "19.1.0",
@@ -21,11 +20,12 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/bun": "1.2.15",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "8",
-    "tailwindcss": "3.4.4"
+    "tailwindcss": "3.4.4",
+    "typescript": "^5"
   }
 }

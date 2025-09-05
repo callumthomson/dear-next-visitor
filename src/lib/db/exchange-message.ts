@@ -1,54 +1,23 @@
-import { ddb, itemKeys } from './ddb';
-import { QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
+import { valkey } from '@/lib/db/valkey';
 
-const getLatestMessage = async (): Promise<string> => {
-  const response = await ddb.send(
-    new QueryCommand({
-      TableName: process.env.DYNAMODB_TABLE_NAME,
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: {
-        ':pk': itemKeys.latestMessage.PK,
-      },
-      Limit: 1,
-      ConsistentRead: true,
-    }),
-  );
-  if (response?.Items?.length && response.Items[0].MessageText) {
-    return response.Items[0].MessageText;
+export const exchangeMessage = async (message: string): Promise<{ previousMessage: string, messageCount: number }> => {
+  const results = await valkey
+    .multi()
+    .incr('MessageCount')
+    .get('LatestMessage')
+    .set('LatestMessage', message)
+    .exec();
+  if (results && results[0] && results[1]) {
+    const messageCountResult = results[0];
+    const previousMessageResult = results[1];
+    if (messageCountResult[0] || previousMessageResult[0]) {
+      throw messageCountResult[0] || previousMessageResult[0];
+    }
+    const messageCount = parseInt(messageCountResult[1] as string);
+    const previousMessage = previousMessageResult[1] as string;
+    return { previousMessage, messageCount };
+  } else {
+    throw new Error('No results from data store.');
   }
-  throw new Error('No latest message found in DynamoDB');
 };
 
-export const exchangeMessage = async (message: string): Promise<string> => {
-  const latestMessage = await getLatestMessage();
-  await ddb.send(
-    new TransactWriteCommand({
-      TransactItems: [
-        {
-          Update: {
-            TableName: process.env.DYNAMODB_TABLE_NAME,
-            Key: { PK: itemKeys.messageCount.PK, SK: itemKeys.messageCount.SK },
-            UpdateExpression: 'ADD MessageCount :incBy',
-            ExpressionAttributeValues: { ':incBy': 1 },
-          },
-        },
-        {
-          Update: {
-            TableName: process.env.DYNAMODB_TABLE_NAME,
-            Key: {
-              PK: itemKeys.latestMessage.PK,
-              SK: itemKeys.latestMessage.SK,
-            },
-            UpdateExpression: 'SET MessageText = :newMessage',
-            ConditionExpression: 'MessageText = :oldMessage',
-            ExpressionAttributeValues: {
-              ':oldMessage': latestMessage,
-              ':newMessage': message,
-            },
-          },
-        },
-      ],
-    }),
-  );
-  return latestMessage;
-};
