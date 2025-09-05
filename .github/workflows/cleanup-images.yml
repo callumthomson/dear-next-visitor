@@ -1,0 +1,21 @@
+name: Prune Old Container Images
+on:
+  schedule:
+    - cron: '0 2 * * 0'
+  workflow_dispatch:  # Allow manual trigger
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Delete old package versions
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.event.repository.name }}
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+          ignore-versions: '^latest$'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
