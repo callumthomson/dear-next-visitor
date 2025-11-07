@@ -1,12 +1,11 @@
 services:
-  valkey:
-    image: valkey/valkey:8.1.3
-    container_name: valkey
-    restart: unless-stopped
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dnv
     ports:
-      - "6379:6379"
-    command: >
-      valkey-server
-      --appendonly yes
-      --appendfsync always
-      --dir /data
+      - "5432:5432"
+    volumes:
+      - .data/postgres:/var/lib/postgresql/data
