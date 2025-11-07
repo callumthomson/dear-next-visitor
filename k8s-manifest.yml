@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dnv
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  namespace: dnv
+#  name: dnv-openai-key
+#type: Opaque
+#stringData:
+#  OPENAI_API_KEY: ""
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  namespace: dnv
+#  name: dnv-postgres
+#type: Opaque
+#stringData:
+#  DB_PASS: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: dnv
+  name: dnv-web
+  labels:
+    app: dnv-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dnv-web
+  template:
+    metadata:
+      labels:
+        app: dnv-web
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/callumthomson/dear-next-visitor:sha-4017605
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          envFrom:
+            - secretRef:
+                name: dnv-openai-key
+            - secretRef:
+                name: dnv-postgres
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: DATABASE_URL
+              value: "postgresql://admin:$(DB_PASS)@postgres.database.svc.cluster.local:5432/dnv"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: dnv
+  name: dnv-web
+spec:
+  selector:
+    app: dnv-web
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: dnv
+  name: dnv
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: dnv-maintenance@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: dev.dearnextvisitor.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dnv-web
+                port:
+                  number: 3000
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  namespace: dnv
+  name: maintenance
+spec:
+  ipWhiteList:
+    sourceRange:
+#      - "127.0.0.1/32"
+      - "0.0.0.0/0"
