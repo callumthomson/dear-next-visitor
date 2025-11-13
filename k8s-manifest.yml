@@ -80,21 +80,9 @@ kind: Ingress
 metadata:
   namespace: dnv
   name: dnv
-  annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: dnv-maintenance@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
-    - host: dev.dearnextvisitor.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: dnv-web
-                port:
-                  number: 3000
     - host: www.dearnextvisitor.com
       http:
         paths:
@@ -105,14 +93,3 @@ spec:
                 name: dnv-web
                 port:
                   number: 3000
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  namespace: dnv
-  name: maintenance
-spec:
-  ipWhiteList:
-    sourceRange:
-#      - "127.0.0.1/32"
-      - "0.0.0.0/0"
