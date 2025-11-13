@@ -38,5 +38,4 @@ Dockerfile
 docker-compose.yml
 docker-stack.yml
 
-# Secrets
-secrets/
+.dockerignore
