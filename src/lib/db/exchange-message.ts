@@ -1,23 +1,22 @@
-import { valkey } from '@/lib/db/valkey';
+import { db } from '@/db/client';
+import { data } from '@/db/schema';
 
 export const exchangeMessage = async (message: string): Promise<{ previousMessage: string, messageCount: number }> => {
-  const results = await valkey
-    .multi()
-    .incr('MessageCount')
-    .get('LatestMessage')
-    .set('LatestMessage', message)
-    .exec();
-  if (results && results[0] && results[1]) {
-    const messageCountResult = results[0];
-    const previousMessageResult = results[1];
-    if (messageCountResult[0] || previousMessageResult[0]) {
-      throw messageCountResult[0] || previousMessageResult[0];
+  return await db.transaction(async (tx) => {
+    const currentData = await tx.query.data.findFirst();
+    if (!currentData) {
+      await tx.insert(data).values({
+        messageCount: 0,
+        latestMessage: '',
+      });
+      return { previousMessage: '', messageCount: 0 };
     }
-    const messageCount = parseInt(messageCountResult[1] as string);
-    const previousMessage = previousMessageResult[1] as string;
-    return { previousMessage, messageCount };
-  } else {
-    throw new Error('No results from data store.');
-  }
+    const messageCount = currentData.messageCount + 1;
+    await tx.update(data).set({
+      messageCount,
+      latestMessage: message,
+    });
+    return { previousMessage: currentData.latestMessage, messageCount }
+  })
 };
 
