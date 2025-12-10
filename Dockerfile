@@ -7,27 +7,23 @@ ENV NEXT_PUBLIC_POSTHOG_KEY=$POSTHOG_KEY
 
 WORKDIR /app
 
-# Copy package.json and bun.lock
 COPY package.json bun.lock ./
 
-# Install dependencies
 RUN bun install --frozen-lockfile
 
-# Copy the rest of the application
 COPY . .
 
-# Create public directory if it doesn't exist
 RUN mkdir -p public
 
-# Build the application
 RUN bun run build
 
-# Production stage
 FROM oven/bun:1-slim AS runner
+
+ARG POSTHOG_KEY
 
 WORKDIR /app
 
-# Set environment variables
+ENV NEXT_PUBLIC_POSTHOG_KEY=$POSTHOG_KEY
 ENV NODE_ENV=production
 
 # Copy necessary files from builder stage
