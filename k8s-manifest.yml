@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: dnv
-#---
+---
 #apiVersion: v1
 #kind: Secret
 #metadata:
@@ -16,11 +16,12 @@ metadata:
 #kind: Secret
 #metadata:
 #  namespace: dnv
-#  name: dnv-postgres
+#  name: dnv-db
 #type: Opaque
 #stringData:
-#  DB_PASS: ""
----
+#  LIBSQL_DB_URL: ""
+#  LIBSQL_DB_TOKEN: ""
+#---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -54,12 +55,10 @@ spec:
             - secretRef:
                 name: dnv-openai-key
             - secretRef:
-                name: dnv-postgres
+                name: dnv-db
           env:
             - name: NODE_ENV
               value: production
-            - name: DATABASE_URL
-              value: "postgresql://admin:$(DB_PASS)@postgres.db.svc.cluster.local:5432/dnv"
 ---
 apiVersion: v1
 kind: Service
