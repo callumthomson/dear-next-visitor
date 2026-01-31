@@ -2,7 +2,7 @@ import { db } from '@/db/client';
 import { data } from '@/db/schema';
 
 export const exchangeMessage = async (message: string): Promise<{ previousMessage: string, messageCount: number }> => {
-  return await db.transaction(async (tx) => {
+  return await db().transaction(async (tx) => {
     const currentData = await tx.query.data.findFirst();
     if (!currentData) {
       await tx.insert(data).values({
