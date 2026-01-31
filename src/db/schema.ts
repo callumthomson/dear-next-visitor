@@ -1,10 +1,10 @@
 import {
-  pgTable,
+  sqliteTable,
   text,
   integer,
-} from 'drizzle-orm/pg-core';
+} from 'drizzle-orm/sqlite-core';
 
-export const data = pgTable('data', {
+export const data = sqliteTable('data', {
   latestMessage: text().notNull(),
   messageCount: integer().notNull(),
 });
