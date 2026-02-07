@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: ghcr.io/callumthomson/dear-next-visitor:sha-45fc842
+          image: ghcr.io/callumthomson/dear-next-visitor:sha-2c300f9
           ports:
             - containerPort: 3000
           resources:
