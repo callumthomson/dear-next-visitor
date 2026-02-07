@@ -2,7 +2,7 @@
 
 import { messageExchangeSchema } from '@/schemas';
 import { moderate } from '@/lib/openai/moderate';
-import * as capture from '@/lib/posthog/capture';
+import * as capture from '@/lib/capture';
 import { curate } from '@/lib/openai/curate';
 import { exchangeMessage } from '@/lib/db/exchange-message';
 import { revalidatePath } from 'next/cache';
@@ -39,8 +39,8 @@ export const exchangeMessageAction = async (props: ExchangeMessageActionProps) =
       },
     }
   }
-  const { previousMessage } = await exchangeMessage(message);
-  await capture.messageExchangeSuccessful();
+  const { previousMessage, messageCount } = await exchangeMessage(message);
+  await capture.messageExchangeSuccessful(messageCount);
   revalidatePath('/')
   return {
     message: previousMessage,
