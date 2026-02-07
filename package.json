@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",
+    "@nats-io/jetstream": "^3.3.0",
+    "@nats-io/transport-node": "^3.3.0",
     "@vercel/functions": "2.2.4",
     "drizzle-orm": "^0.45.1",
     "next": "16.0.11",

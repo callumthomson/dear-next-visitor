@@ -5,7 +5,7 @@ let dbInstance: ReturnType<typeof drizzle<typeof schema>> | undefined;
 
 export const db = () => {
   if (!dbInstance) {
-    if (!process.env.LIBSQL_DB_URL || !process.env.LIBSQL_DB_TOKEN) {
+    if (!process.env.LIBSQL_DB_URL) {
       throw new Error('Database credentials not configured');
     }
 

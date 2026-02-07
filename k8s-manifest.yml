@@ -22,6 +22,17 @@ metadata:
 #  LIBSQL_DB_URL: ""
 #  LIBSQL_DB_TOKEN: ""
 #---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  namespace: dnv
+#  name: dnv-nats-jetstream
+#type: Opaque
+#stringData:
+#  NATS_JS_SERVER: ""
+#  NATS_JS_USER: ""
+#  NATS_JS_PASS: ""
+#---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,7 +52,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: ghcr.io/callumthomson/dear-next-visitor:sha-9e97675
+          image: ghcr.io/callumthomson/dear-next-visitor:sha-45fc842
           ports:
             - containerPort: 3000
           resources:
@@ -56,6 +67,8 @@ spec:
                 name: dnv-openai-key
             - secretRef:
                 name: dnv-db
+            - secretRef:
+                name: dnv-nats-jetstream
           env:
             - name: NODE_ENV
               value: production
