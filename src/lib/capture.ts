@@ -17,7 +17,7 @@ export const messageExchangeSuccessful = async (messageCount: number) => {
     event,
     properties
   });
-  await nats.publish(`dnv.${event}`, JSON.stringify(properties))
+  await nats?.publish(`dnv.${event}`, JSON.stringify(properties))
 }
 
 export const moderationRejected = async (message: string, moderationResult: OpenAI.Moderation) => {
@@ -38,7 +38,7 @@ export const moderationRejected = async (message: string, moderationResult: Open
     event,
     properties,
   });
-  await nats.publish(`dnv.${event}`, JSON.stringify(properties));
+  await nats?.publish(`dnv.${event}`, JSON.stringify(properties));
 }
 
 export const curationRejected = async (message: string, curation: Curation) => {
@@ -58,5 +58,5 @@ export const curationRejected = async (message: string, curation: Curation) => {
     event,
     properties,
   });
-  await nats.publish(`dnv.${event}`, JSON.stringify(properties));
+  await nats?.publish(`dnv.${event}`, JSON.stringify(properties));
 }
