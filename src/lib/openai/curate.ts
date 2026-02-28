@@ -10,7 +10,7 @@ const prompt =
   '\n' +
   'The rules for the text which you are judging:\n' +
   '- Spam is prohibited\n' +
-  '- Gibberish or unreadable/nonsensical messages are prohibited, but spelling errors are acceptable when the text is still readable\n' +
+  '- Totally gibberish or unreadable/nonsensical messages are prohibited, but some nonsense, gibberish or spelling errors are acceptable when the whole text is still readable\n' +
   '- Direct web links are prohibited but references to websites are allowed\n' +
   '- Funny or humorous messages are encouraged, but not required at all\n' +
   '\n' +
