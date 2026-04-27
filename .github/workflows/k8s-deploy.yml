@@ -1,0 +1,50 @@
+name: Deploy to k8s cluster
+run-name: Deploy to k8s cluster (${{ inputs.image-tag }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-tag:
+        description: 'Docker image tag to deploy'
+        required: true
+  workflow_call:
+    inputs:
+      image-tag:
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ inputs.image-tag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Print Inputs
+        run: | 
+          echo "Image Tag: ${IMAGE_TAG}"
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${KUBECONFIG_B64}" | base64 -d > ~/.kube/config
+        env:
+          KUBECONFIG_B64: ${{ secrets.KUBECONFIG_B64 }}
+      - name: Apply Secrets Manifest
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          NATS_JS_USER: ${{ secrets.NATS_JS_USER }}
+          NATS_JS_PASS: ${{ secrets.NATS_JS_PASS }}
+          NATS_JS_SERVER: ${{ secrets.NATS_JS_SERVER }}
+          LIBSQL_DB_TOKEN: ${{ secrets.LIBSQL_DB_TOKEN }}
+          LIBSQL_DB_URL: ${{ secrets.LIBSQL_DB_URL }}
+        run: |
+          envsubst < k8s-manifest.yml > k8s-manifest.rendered.yml
+          kubectl apply -f k8s-manifest.rendered.yml

@@ -1,40 +1,29 @@
-# Build stage
-FROM oven/bun:1 AS builder
-
-ARG POSTHOG_KEY
-
-ENV NEXT_PUBLIC_POSTHOG_KEY=$POSTHOG_KEY
+FROM oven/bun:1 AS build
 
 WORKDIR /app
-
-COPY package.json bun.lock ./
-
-RUN bun install --frozen-lockfile
 
 COPY . .
+RUN bun install --frozen-lockfile
 
-RUN mkdir -p public
+# Declare build arguments
+ARG POSTHOG_KEY
+# Make it available as environment variable during build
+ENV VITE_PUBLIC_POSTHOG_KEY=$POSTHOG_KEY
 
+# Build the project
 RUN bun run build
 
-FROM oven/bun:1-slim AS runner
-
-ARG POSTHOG_KEY
+FROM oven/bun:1 AS production
 
 WORKDIR /app
 
-ENV NEXT_PUBLIC_POSTHOG_KEY=$POSTHOG_KEY
-ENV NODE_ENV=production
+# Copy only what is needed for runtime
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/server.ts ./server.ts
+COPY --from=build /app/node_modules ./node_modules
 
-# Copy necessary files from builder stage
-COPY --from=builder /app/next.config.ts ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
-# Expose the port the app will run on
+# Expose a port if needed
 EXPOSE 3000
 
-# Command to run the application
-CMD ["bun", "run", "start"]
+# Start the app
+CMD ["bun", "server.ts"]

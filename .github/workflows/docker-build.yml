@@ -2,9 +2,9 @@ name: Build and Push Docker Image
 
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
 
 env:
   REGISTRY: ghcr.io
@@ -12,6 +12,8 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.meta.outputs.version }}
     permissions:
       contents: read
       packages: write
@@ -33,7 +35,6 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,format=short
-            type=raw,value=latest
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -46,3 +47,11 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             POSTHOG_KEY=${{ vars.POSTHOG_KEY }}
+  deploy:
+    needs: build-and-push
+    uses: ./.github/workflows/k8s-deploy.yml
+    permissions:
+      contents: read
+    secrets: inherit
+    with:
+      image-tag: ${{ needs.build-and-push.outputs.image-tag }}
