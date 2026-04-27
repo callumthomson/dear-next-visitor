@@ -1,25 +1,35 @@
 import { connect, type NatsConnection } from '@nats-io/transport-node';
-import { jetstream as connectJetstream, JetStreamClient } from '@nats-io/jetstream';
+import { jetstream, type JetStreamClient } from '@nats-io/jetstream';
 
-let connection: NatsConnection | null = null;
-let jetstreamClient: JetStreamClient | null = null;
+let natsConnection: NatsConnection | null = null;
+let jsClient: JetStreamClient | null = null;
 
-export const nats = async () => {
-  if (connection) return connection;
+const nats = async () => {
+	if (natsConnection) return natsConnection;
 
-  connection = await connect({
-    servers: process.env.NATS_JS_SERVER,
-    user: process.env.NATS_JS_USER,
-    pass: process.env.NATS_JS_PASS,
-  });
+	if (
+		process.env.NATS_JS_SERVER &&
+		process.env.NATS_JS_USER &&
+		process.env.NATS_JS_PASS
+	) {
+		natsConnection = await connect({
+			servers: process.env.NATS_JS_SERVER,
+			user: process.env.NATS_JS_USER,
+			pass: process.env.NATS_JS_PASS,
+		});
+	}
 
-  return connection;
-}
+	return natsConnection;
+};
 
-export const jetstream = async () => {
-  if (jetstreamClient) return jetstreamClient;
+export const jetstreamClient = async () => {
+	if (jsClient) return jsClient;
 
-  jetstreamClient = connectJetstream(await nats());
+	const natsConnection = await nats();
 
-  return jetstreamClient;
-}
+	if (natsConnection) {
+		jsClient = jetstream(natsConnection);
+	}
+
+	return jsClient;
+};

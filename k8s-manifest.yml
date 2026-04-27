@@ -3,36 +3,36 @@ kind: Namespace
 metadata:
   name: dnv
 ---
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  namespace: dnv
-#  name: dnv-openai-key
-#type: Opaque
-#stringData:
-#  OPENAI_API_KEY: ""
-#---
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  namespace: dnv
-#  name: dnv-db
-#type: Opaque
-#stringData:
-#  LIBSQL_DB_URL: ""
-#  LIBSQL_DB_TOKEN: ""
-#---
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  namespace: dnv
-#  name: dnv-nats-jetstream
-#type: Opaque
-#stringData:
-#  NATS_JS_SERVER: ""
-#  NATS_JS_USER: ""
-#  NATS_JS_PASS: ""
-#---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: dnv
+  name: dnv-openai-key
+type: Opaque
+stringData:
+  OPENAI_API_KEY: "${OPENAI_API_KEY}"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: dnv
+  name: dnv-db
+type: Opaque
+stringData:
+  LIBSQL_DB_URL: "${LIBSQL_DB_URL}"
+  LIBSQL_DB_TOKEN: "${LIBSQL_DB_TOKEN}"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: dnv
+  name: dnv-nats-jetstream
+type: Opaque
+stringData:
+  NATS_JS_SERVER: "${NATS_JS_SERVER}"
+  NATS_JS_USER: "${NATS_JS_USER}"
+  NATS_JS_PASS: "${NATS_JS_PASS}"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: ghcr.io/callumthomson/dear-next-visitor:sha-45fc842
+          image: ghcr.io/callumthomson/dear-next-visitor:${IMAGE_TAG}
           ports:
             - containerPort: 3000
           resources:
