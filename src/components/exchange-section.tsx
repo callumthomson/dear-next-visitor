@@ -39,19 +39,15 @@ export const ExchangeSection = () => {
 			});
 	};
 	return (
-		// <div className={'bg-zinc-800 p-5 my-3 rounded'}>
 		<div className={css({ background: 'zinc.800', padding: '5', my: '3', rounded: 'md' })}>
 			{receivedMessage ? (
 				<MessageDisplay message={receivedMessage} />
 			) : (
 				<>
-					{/*<h2 className={'text-3xl mb-4 font-bold'}>Give One, Take One</h2>*/}
 					<h2 className={css({ fontSize: '3xl', marginBottom: '4', fontWeight: 'bold' })}>Give One, Take One</h2>
-					{/*<p className={'italic'}>*/}
 					<p className={css({ fontStyle: 'italic' })}>
 						There is a message waiting that has been written just for you...
 					</p>
-					{/*<p className={'my-4'}>*/}
 					<p className={css({ my: '4' })}>
 						This message has been written{' '}
 						<i className={css({ fontStyle: 'italic' })}>for your eyes only</i> by the last person
@@ -60,7 +56,6 @@ export const ExchangeSection = () => {
 						own for the next visitor:
 					</p>
 					<form onSubmit={onSubmit}>
-						{/*<div className={'flex flex-col sm:flex-row'}>*/}
 						<div className={flex({ direction: { base: 'column', sm: 'row' } })}>
 							<textarea
 								autoFocus={true}
@@ -68,9 +63,6 @@ export const ExchangeSection = () => {
 								value={myMessage}
 								onChange={(e) => setMyMessage(e.target.value)}
 								placeholder={'Dear Next Visitor...'}
-								// className={
-								// 	'bg-zinc-400 w-full min-h-20 py-1 px-2 border-none focus:outline-none text-zinc-800 placeholder:text-zinc-600 disabled:opacity-25'
-								// }
 								className={css({
 									width: 'full',
 									minHeight: '20',
@@ -86,7 +78,6 @@ export const ExchangeSection = () => {
 								})}
 							/>
 							<button
-								// className={'bg-orange-900 py-3 px-7 disabled:opacity-50'}
 								className={css({
 									background: 'orange.900',
 									py: '3',
@@ -101,7 +92,6 @@ export const ExchangeSection = () => {
 						</div>
 						{!!errorMessages.length && (
 							<div>
-								{/*<ul className={'p-2 text-red-500 list-disc pl-5'}>*/}
 								<ul className={css({ p: '2', color: 'red.500', listStyleType: 'disc', pl: '5' })}>
 									{errorMessages.map((msg) => (
 										<li key={msg}>{msg}</li>
@@ -109,7 +99,6 @@ export const ExchangeSection = () => {
 								</ul>
 							</div>
 						)}
-						{/*<div className={'text-xs text-zinc-500 mt-3'}>*/}
 						<div className={css({ fontSize: 'xs', color: 'zinc.500', mt: '3'})}>
 							Submitted messages are automatically moderated for abuse but
 							abusive/obscene messages may still make it through. Please proceed
