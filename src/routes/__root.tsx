@@ -41,7 +41,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					options={{
 						api_host: 'https://us.i.posthog.com',
 						defaults: '2026-01-30',
-						capture_exceptions: true
+						capture_exceptions: true,
 					}}
 				>
 					{children}
