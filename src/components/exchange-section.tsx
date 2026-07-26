@@ -39,21 +39,36 @@ export const ExchangeSection = () => {
 			});
 	};
 	return (
-		<div className={css({ background: 'zinc.800', padding: '5', my: '3', rounded: 'md' })}>
+		<div
+			className={css({
+				background: 'zinc.800',
+				padding: '5',
+				my: '3',
+				rounded: 'md',
+			})}
+		>
 			{receivedMessage ? (
 				<MessageDisplay message={receivedMessage} />
 			) : (
 				<>
-					<h2 className={css({ fontSize: '3xl', marginBottom: '4', fontWeight: 'bold' })}>Give One, Take One</h2>
+					<h2
+						className={css({
+							fontSize: '3xl',
+							marginBottom: '4',
+							fontWeight: 'bold',
+						})}
+					>
+						Give One, Take One
+					</h2>
 					<p className={css({ fontStyle: 'italic' })}>
 						There is a message waiting that has been written just for you...
 					</p>
 					<p className={css({ my: '4' })}>
 						This message has been written{' '}
-						<i className={css({ fontStyle: 'italic' })}>for your eyes only</i> by the last person
-						who visited this page. You will be the only person to read this
-						message. Before you read it, you must first leave a message of your
-						own for the next visitor:
+						<i className={css({ fontStyle: 'italic' })}>for your eyes only</i>{' '}
+						by the last person who visited this page. You will be the only
+						person to read this message. Before you read it, you must first
+						leave a message of your own for the next visitor:
 					</p>
 					<form onSubmit={onSubmit}>
 						<div className={flex({ direction: { base: 'column', sm: 'row' } })}>
@@ -92,14 +107,23 @@ export const ExchangeSection = () => {
 						</div>
 						{!!errorMessages.length && (
 							<div>
-								<ul className={css({ p: '2', color: 'red.500', listStyleType: 'disc', pl: '5' })}>
+								<ul
+									className={css({
+										p: '2',
+										color: 'red.500',
+										listStyleType: 'disc',
+										pl: '5',
+									})}
+								>
 									{errorMessages.map((msg) => (
 										<li key={msg}>{msg}</li>
 									))}
 								</ul>
 							</div>
 						)}
-						<div className={css({ fontSize: 'xs', color: 'zinc.500', mt: '3'})}>
+						<div
+							className={css({ fontSize: 'xs', color: 'zinc.500', mt: '3' })}
+						>
 							Submitted messages are automatically moderated for abuse but
 							abusive/obscene messages may still make it through. Please proceed
 							at your own risk, as I do not take responsibility for messages

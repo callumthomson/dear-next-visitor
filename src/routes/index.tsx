@@ -12,12 +12,14 @@ export const Route = createFileRoute('/')({
 function App() {
 	const count = Route.useLoaderData();
 	return (
-		<div className={flex({
-			direction: 'column',
-			justify: 'space-between',
-			align: 'center',
-			minHeight: 'screen',
-		})}>
+		<div
+			className={flex({
+				direction: 'column',
+				justify: 'space-between',
+				align: 'center',
+				minHeight: 'screen',
+			})}
+		>
 			<div
 				className={flex({
 					direction: {
@@ -39,15 +41,24 @@ function App() {
 					{count.toLocaleString()} Messages Delivered
 				</div>
 			</div>
-			<div className={css({ color: 'zinc.300', padding: '4', width: 'full', maxWidth: 'breakpoint-md' })}>
+			<div
+				className={css({
+					color: 'zinc.300',
+					padding: '4',
+					width: 'full',
+					maxWidth: 'breakpoint-md',
+				})}
+			>
 				<ExchangeSection />
 			</div>
-			<div className={flex({
-				padding: '3',
-				width: 'full',
-				background: 'zinc.800',
-				justify: 'space-between',
-			})}>
+			<div
+				className={flex({
+					padding: '3',
+					width: 'full',
+					background: 'zinc.800',
+					justify: 'space-between',
+				})}
+			>
 				<div>Copyright &copy; Every Year For Ever</div>
 				<div>
 					By{' '}
