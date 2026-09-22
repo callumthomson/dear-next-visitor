@@ -1,18 +1,15 @@
-import { drizzle } from 'drizzle-orm/libsql';
+import { drizzle } from 'drizzle-orm/libsql/web';
+import { Resource } from 'sst';
 import * as schema from './schema';
 
 let dbInstance: ReturnType<typeof drizzle<typeof schema>> | undefined;
 
 export const db = () => {
 	if (!dbInstance) {
-		if (!process.env.LIBSQL_DB_URL) {
-			throw new Error('Database credentials not configured');
-		}
-
 		dbInstance = drizzle({
 			connection: {
-				url: process.env.LIBSQL_DB_URL,
-				authToken: process.env.LIBSQL_DB_TOKEN,
+				url: Resource.LIBSQL_DB_URL.value,
+				authToken: Resource.LIBSQL_DB_TOKEN.value,
 			},
 			schema,
 		});
