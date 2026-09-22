@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "app" {
   comment             = "${local.project_name} default distribution"
   price_class         = "PriceClass_100"
   wait_for_deployment = false
-  aliases             = [local.domain, "www.${local.domain}"]
+  # aliases             = [local.domain, "www.${local.domain}"]
 
   origin {
     domain_name = data.aws_lb.app.dns_name
@@ -83,9 +83,9 @@ resource "aws_cloudfront_distribution" "app" {
   }
 
   viewer_certificate {
-    # cloudfront_default_certificate = true
-    acm_certificate_arn      = aws_acm_certificate_validation.this.certificate_arn
-    minimum_protocol_version = "TLSv1.2_2021"
-    ssl_support_method       = "sni-only"
+    cloudfront_default_certificate = true
+    # acm_certificate_arn      = aws_acm_certificate_validation.this.certificate_arn
+    # minimum_protocol_version = "TLSv1.2_2021"
+    # ssl_support_method       = "sni-only"
   }
 }

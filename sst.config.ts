@@ -53,10 +53,16 @@ export default $config({
           lambdaSecurityGroup.id,
         ],
       },
-      // domain: {
-      //   name: "www.countcap.co",
-      //   redirects: ["countcap.co"],
-      // },
+      domain: {
+        name: "www.dearnextvisitor.com",
+        redirects: ["dearnextvisitor.com"],
+      },
+      server: {
+        memory: "2096 MB",
+      },
+      environment: {
+        VITE_PUBLIC_POSTHOG_KEY: "phc_S8wR0LhS6z30om4UBirN1wpOc5jyrBALur4Apdw8HJ5",
+      },
       link: [
         libSqlUrl,
         libSqlToken,
