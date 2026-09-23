@@ -38,7 +38,7 @@ export default $config({
         },
       ],
       tags: {
-        Name: "dnv-prd-lambda",
+        Name: `${$app.name}-${$app.stage}-lambda`,
       },
     });
 
