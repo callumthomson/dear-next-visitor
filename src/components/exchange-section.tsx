@@ -6,6 +6,7 @@ import { exchangeMessageFunction } from '@/lib/server-functions';
 import { useRouter } from '@tanstack/react-router';
 import { css } from 'styled-system/css';
 import { flex } from 'styled-system/patterns';
+import { messageExchangeSchema } from '@/schemas.ts';
 
 export const ExchangeSection = () => {
 	const [myMessage, setMyMessage] = useState('');
@@ -16,8 +17,20 @@ export const ExchangeSection = () => {
 
 	const onSubmit = (e: SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		const validationResult = messageExchangeSchema.safeParse({
+			message: myMessage,
+		});
+
+		if (!validationResult.success) {
+			setErrorMessages(
+				validationResult.error.issues.map((issue) => issue.message),
+			);
+			return;
+		}
+
 		setIsPending(true);
-		exchangeMessageFunction({ data: { message: myMessage } })
+		exchangeMessageFunction({ data: validationResult.data })
 			.then((response) => {
 				if (response.message) {
 					setErrorMessages([]);
