@@ -24,7 +24,7 @@ export default $config({
   async run() {
     const libSqlUrl = new sst.Secret('LIBSQL_DB_URL');
     const libSqlToken = new sst.Secret('LIBSQL_DB_TOKEN');
-    const openaiApiKey = new sst.Secret('OPENAI_API_KEY');
+    const typeSafeAiApiKey = new sst.Secret('TYPESAFE_API_KEY');
 
     const lambdaSecurityGroup = new aws.ec2.SecurityGroup("DnvLambdaSecurityGroup", {
       vpcId: "vpc-0ef289a9cb971e18f",
@@ -66,7 +66,7 @@ export default $config({
       link: [
         libSqlUrl,
         libSqlToken,
-        openaiApiKey
+        typeSafeAiApiKey,
       ]
     });
   },

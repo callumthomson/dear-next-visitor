@@ -1,29 +1,19 @@
 import { messageExchangeSchema } from '@/schemas';
-import { moderate } from '@/lib/openai/moderate';
+import { filter } from '@/lib/typesafeai/typesafeai.ts';
 import * as capture from '@/lib/capture';
-import { curate } from '@/lib/openai/curate';
 import { exchangeMessage } from '@/lib/db/exchange-message';
 import { getMessageCount } from '@/lib/db/get-message-count';
 import { createServerFn } from '@tanstack/react-start';
 
 export const exchangeMessageFunction = createServerFn({ method: 'POST' })
-	.inputValidator(messageExchangeSchema)
+	.validator(messageExchangeSchema)
 	.handler(async ({ data: { message } }) => {
-		const moderationResult = await moderate(message);
-		if (moderationResult.flagged) {
-			await capture.moderationRejected(message, moderationResult);
+		const filterResult = await filter(message);
+		if (!filterResult.pass) {
+			await capture.filterRejected(message, filterResult.reason);
 			return {
 				error: {
-					messages: ['Moderation rejected'],
-				},
-			};
-		}
-		const curation = await curate(message);
-		if (!curation.pass) {
-			await capture.curationRejected(message, curation);
-			return {
-				error: {
-					messages: [`Curation rejected: ${curation.reason}`],
+					messages: [`Filter rejected: ${filterResult.reason}`],
 				},
 			};
 		}
