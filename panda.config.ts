@@ -1,6 +1,9 @@
 import { defineConfig } from "@pandacss/dev";
 
 export default defineConfig({
+  // Panda v2 requires explicit presets for utilities, conditions, and theme tokens.
+  presets: ["@pandacss/preset-base", "@pandacss/preset-panda"],
+
   // Whether to use css reset
   preflight: true,
 

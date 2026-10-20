@@ -1,3 +1,4 @@
+// Use the remote client so builds do not package host-specific SQLite binaries.
 import { drizzle } from 'drizzle-orm/libsql/web';
 import { Resource } from 'sst';
 import * as schema from './schema';
@@ -9,7 +10,7 @@ export const db = () => {
 		dbInstance = drizzle({
 			connection: {
 				url: Resource.LIBSQL_DB_URL.value,
-				authToken: Resource.LIBSQL_DB_TOKEN.value,
+				authToken: Resource.LIBSQL_DB_TOKEN.value || undefined,
 			},
 			schema,
 		});

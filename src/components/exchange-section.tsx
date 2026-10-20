@@ -110,6 +110,7 @@ export const ExchangeSection = () => {
 									background: 'orange.900',
 									py: '3',
 									px: '7',
+									cursor: 'pointer',
 									_disabled: { opacity: '50' },
 								})}
 								disabled={isPending}
