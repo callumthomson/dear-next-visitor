@@ -15,14 +15,14 @@ export const MessageDisplay = ({ message }: { message: string }) => {
 				leave this page, the message will disappear forever...
 			</p>
 			<div
-				className={css({
+				className={`${css({
 					bg: 'orange.900',
 					py: '4',
 					px: '6',
 					borderStyle: 'dashed',
 					borderColor: 'orange.700',
 					borderWidth: '2',
-				})}
+				})} halloween-message`}
 			>
 				{message}
 			</div>

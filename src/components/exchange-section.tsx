@@ -53,13 +53,26 @@ export const ExchangeSection = () => {
 	};
 	return (
 		<div
-			className={css({
+			className={`${css({
 				background: 'zinc.800',
 				padding: '5',
 				my: '3',
 				rounded: 'md',
-			})}
+			})} halloween-card`}
 		>
+			<svg
+				aria-hidden="true"
+				className="halloween-pumpkin"
+				focusable="false"
+				viewBox="0 0 96 96"
+			>
+				<path d="M45 28c1-11 7-17 17-19-1 9-5 16-13 21" fill="#71834a" />
+				<ellipse cx="48" cy="57" rx="37" ry="29" fill="#e67832" />
+				<ellipse cx="32" cy="57" rx="19" ry="26" fill="#c9522a" opacity=".58" />
+				<ellipse cx="64" cy="57" rx="19" ry="26" fill="#f28b3e" opacity=".52" />
+				<path d="m29 48 12 4-10 10zm38 0-12 4 10 10zM31 67c10-2 24-2 34 0-4 12-11 17-17 17s-13-5-17-17Z" fill="#352039" />
+				<path d="M38 70h5v5h-5zm10 0h5v5h-5zm10 0h5v5h-5z" fill="#e67832" />
+			</svg>
 			{receivedMessage ? (
 				<MessageDisplay message={receivedMessage} />
 			) : (
@@ -91,7 +104,7 @@ export const ExchangeSection = () => {
 								value={myMessage}
 								onChange={(e) => setMyMessage(e.target.value)}
 								placeholder={'Dear Next Visitor...'}
-								className={css({
+								className={`${css({
 									width: 'full',
 									minHeight: '20',
 									py: '1',
@@ -103,16 +116,16 @@ export const ExchangeSection = () => {
 									_focus: { outline: 'none' },
 									_placeholder: { color: 'zinc.600' },
 									_disabled: { opacity: '25' },
-								})}
+								})} halloween-textarea`}
 							/>
 							<button
-								className={css({
+								className={`${css({
 									background: 'orange.900',
 									py: '3',
 									px: '7',
 									cursor: 'pointer',
 									_disabled: { opacity: '50' },
-								})}
+								})} halloween-submit`}
 								disabled={isPending}
 								type={'submit'}
 							>
