@@ -200,6 +200,19 @@ body {
 	pointer-events: none;
 }
 
+.halloween-decorations::before {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 8rem;
+	background:
+		radial-gradient(ellipse at 18% 100%, rgb(176 156 194 / 14%), transparent 58%),
+		radial-gradient(ellipse at 84% 100%, rgb(125 96 148 / 12%), transparent 54%);
+	content: '';
+	filter: blur(18px);
+}
+
 .halloween-web {
 	position: absolute;
 	top: 5.25rem;
@@ -211,6 +224,19 @@ body {
 	stroke-width: 1.25;
 	stroke-linecap: round;
 	opacity: 0.32;
+}
+
+.halloween-web .halloween-spider-thread {
+	fill: none;
+	stroke: #d3b6da;
+	stroke-width: 1;
+}
+
+.halloween-web .halloween-spider {
+	fill: #9e81ad;
+	stroke: #9e81ad;
+	stroke-linecap: round;
+	stroke-width: 1.8;
 }
 
 .halloween-ghost {
@@ -238,6 +264,28 @@ body {
 	filter: drop-shadow(0 0 12px rgb(181 133 185 / 24%));
 	opacity: 0.58;
 	animation: halloween-flight 7s ease-in-out infinite;
+}
+
+.halloween-cat {
+	position: absolute;
+	right: 3.5vw;
+	bottom: 3.8rem;
+	display: none;
+	width: 6.5rem;
+	fill: #211927;
+	filter: drop-shadow(0 0 14px rgb(158 112 176 / 26%));
+}
+
+.halloween-cat-tail {
+	fill: none;
+	stroke: #211927;
+	stroke-linecap: round;
+	stroke-width: 8;
+}
+
+.halloween-cat-eye {
+	fill: #ffc16c;
+	filter: drop-shadow(0 0 5px rgb(255 171 78 / 80%));
 }
 
 @keyframes halloween-float {
@@ -296,6 +344,13 @@ body {
 		left: 1rem;
 		width: 5rem;
 		opacity: 0.38;
+	}
+
+}
+
+@media (min-width: 75rem) {
+	.halloween-cat {
+		display: block;
 	}
 }
 

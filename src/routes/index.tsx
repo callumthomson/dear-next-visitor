@@ -81,6 +81,12 @@ function App() {
 				<svg className="halloween-web" viewBox="0 0 140 140" focusable="false">
 					<path d="M140 0 0 0M140 0 0 70M140 0 0 140M140 0 70 140M140 0 140 140" />
 					<path d="M112 0Q112 28 140 28M84 0Q84 56 140 56M56 0Q56 84 140 84M28 0Q28 112 140 112" />
+					<path className="halloween-spider-thread" d="M70 0v43" />
+					<g className="halloween-spider">
+						<path d="m65 48-9-7m9 12-12 2m12 3-9 9m19-19 9-7m-9 12 12 2m-12 3 9 9" />
+						<circle cx="70" cy="53" r="5" />
+						<ellipse cx="70" cy="62" rx="7" ry="9" />
+					</g>
 				</svg>
 				<svg className="halloween-ghost" viewBox="0 0 100 112" focusable="false">
 					<path d="M14 105V49C14 24 30 7 50 7s36 17 36 42v56L72 94l-13 11-12-11-14 11-11-11-8 11Z" />
@@ -90,6 +96,11 @@ function App() {
 				</svg>
 				<svg className="halloween-flight" viewBox="0 0 132 62" focusable="false">
 					<path d="M2 14c9 1 15 5 19 12 0-7 3-12 7-16 5 4 7 9 7 16 4-7 10-11 19-12-2 6-2 11 0 16-6-2-11-1-15 3-2 3-5 5-8 7-4-2-6-4-8-7-4-4-9-5-15-3 2-5 2-10 0-16Zm73 5c7 1 12 4 15 9 0-5 2-9 5-12 4 3 6 7 6 12 3-5 8-8 15-9-2 5-2 9 0 13-5-1-9-1-12 3-2 2-4 4-7 5-3-1-5-3-7-5-3-4-7-4-12-3 2-4 2-8 0-13Z" />
+				</svg>
+				<svg className="halloween-cat" viewBox="0 0 120 104" focusable="false">
+					<path className="halloween-cat-tail" d="M35 79C18 94 8 84 13 73c3-7 11-8 16-3" />
+					<path d="m31 52-5-34 28 20c8-3 17-3 25 0l28-20-5 35c6 8 8 17 7 29l-1 13H35c-7-10-8-27-4-43Z" />
+					<path className="halloween-cat-eye" d="M45 59c5-5 10-5 14 0l-7 9zm20 0c5-5 10-5 14 0l-7 9z" />
 				</svg>
 			</div>
 		</div>
