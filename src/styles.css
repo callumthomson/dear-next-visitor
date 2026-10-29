@@ -192,6 +192,74 @@ body {
 	color: #ffe0b8;
 }
 
+.halloween-decorations {
+	position: absolute;
+	z-index: 0;
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.halloween-web {
+	position: absolute;
+	top: 5.25rem;
+	right: 1.5rem;
+	width: 8.75rem;
+	height: 8.75rem;
+	fill: none;
+	stroke: #d3b6da;
+	stroke-width: 1.25;
+	stroke-linecap: round;
+	opacity: 0.32;
+}
+
+.halloween-ghost {
+	position: absolute;
+	bottom: 4rem;
+	left: 3.5vw;
+	width: 5.5rem;
+	fill: #ece3ee;
+	filter: drop-shadow(0 0 18px rgb(218 191 231 / 25%));
+	opacity: 0.7;
+	animation: halloween-float 4s ease-in-out infinite;
+}
+
+.halloween-ghost ellipse,
+.halloween-ghost path:nth-of-type(2) {
+	fill: #382a45;
+}
+
+.halloween-flight {
+	position: absolute;
+	top: 39%;
+	left: 6vw;
+	width: 8.25rem;
+	fill: #765781;
+	filter: drop-shadow(0 0 12px rgb(181 133 185 / 24%));
+	opacity: 0.58;
+	animation: halloween-flight 7s ease-in-out infinite;
+}
+
+@keyframes halloween-float {
+	0%,
+	100% {
+		transform: translateY(0) rotate(-3deg);
+	}
+	50% {
+		transform: translateY(-9px) rotate(2deg);
+	}
+}
+
+@keyframes halloween-flight {
+	0%,
+	100% {
+		transform: translate(0, 0) rotate(-4deg);
+	}
+	50% {
+		transform: translate(12px, -8px) rotate(2deg);
+	}
+}
+
 @media (max-width: 40rem) {
 	.halloween-textarea {
 		border-radius: 0.75rem 0.75rem 0 0;
@@ -207,11 +275,36 @@ body {
 		gap: 0.75rem;
 		font-size: 0.75rem;
 	}
+
+	.halloween-web {
+		top: 5.5rem;
+		right: -2.75rem;
+		width: 7rem;
+		height: 7rem;
+		opacity: 0.2;
+	}
+
+	.halloween-ghost {
+		bottom: 4.5rem;
+		left: 0.4rem;
+		width: 3.5rem;
+		opacity: 0.3;
+	}
+
+	.halloween-flight {
+		top: 6.4rem;
+		left: 1rem;
+		width: 5rem;
+		opacity: 0.38;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.halloween-textarea,
-	.halloween-submit {
+	.halloween-submit,
+	.halloween-ghost,
+	.halloween-flight {
 		transition: none;
+		animation: none;
 	}
 }
