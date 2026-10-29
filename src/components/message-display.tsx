@@ -4,7 +4,7 @@ export const MessageDisplay = ({ message }: { message: string }) => {
 	return (
 		<>
 			<h2 className={css({ fontSize: '3xl', mb: '4', fontWeight: 'bold' })}>
-				Thank you for your message
+				Your message has been sealed
 			</h2>
 			<p className={css({ my: '4' })}>
 				Your message has been saved and will be revealed to the next visitor

@@ -84,7 +84,7 @@ export const ExchangeSection = () => {
 							fontWeight: 'bold',
 						})}
 					>
-						Give One, Take One
+						Leave a Note for the Next Soul
 					</h2>
 					<p className={css({ fontStyle: 'italic' })}>
 						There is a message waiting that has been written just for you...
